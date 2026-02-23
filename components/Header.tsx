@@ -62,6 +62,28 @@ export default function Header() {
     }, 180);
   }, [clearGalleryCloseTimer]);
 
+  const handleGalleryBlur = useCallback(
+    (event: React.FocusEvent<HTMLDivElement>) => {
+      const nextFocused = event.relatedTarget as Node | null;
+      if (nextFocused && event.currentTarget.contains(nextFocused)) return;
+      closeGalleryMenu();
+    },
+    [closeGalleryMenu],
+  );
+
+  const handleGalleryKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLDivElement>) => {
+      if (event.key !== "Escape") return;
+      event.preventDefault();
+      closeGalleryMenu();
+      const trigger = event.currentTarget.querySelector<HTMLButtonElement>(
+        "button",
+      );
+      trigger?.focus();
+    },
+    [closeGalleryMenu],
+  );
+
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -214,6 +236,8 @@ export default function Header() {
             className={styles.dropdown}
             onMouseEnter={openGalleryMenu}
             onMouseLeave={scheduleGalleryClose}
+            onBlur={handleGalleryBlur}
+            onKeyDown={handleGalleryKeyDown}
           >
             <button
               type="button"
