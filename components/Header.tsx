@@ -5,8 +5,6 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect, useRef, useCallback } from "react";
 import TransitionLink from "@/components/motion/TransitionLink";
 import { AnimatePresence, motion } from "framer-motion";
-import { FiArrowUpRight } from "react-icons/fi";
-import { linkVariants } from "@/components/motion/variants";
 import styles from "./Header.module.css";
 
 const navItems = [
@@ -16,7 +14,6 @@ const navItems = [
   { label: "About", href: "/about" },
 ];
 
-const externalLinks = [{ label: "Docs", href: "https://docs.lmms-lab.com" }];
 const galleryProjects = [
   {
     label: "LMMS Lab Writer",
@@ -29,38 +26,6 @@ const galleryProjects = [
     domain: "www.engram-encrypt.com",
   },
 ];
-
-// External link component that matches TransitionLink structure
-function ExternalLink({
-  href,
-  className,
-  children,
-  onClick,
-}: {
-  href: string;
-  className?: string;
-  children: React.ReactNode;
-  onClick?: () => void;
-}) {
-  return (
-    <motion.div
-      variants={linkVariants}
-      initial="initial"
-      whileHover="hover"
-      whileTap="tap"
-    >
-      <a
-        href={href}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={className}
-        onClick={onClick}
-      >
-        {children}
-      </a>
-    </motion.div>
-  );
-}
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -300,23 +265,6 @@ export default function Header() {
               )}
             </AnimatePresence>
           </div>
-          {externalLinks.map((item) => (
-            <ExternalLink
-              key={item.href}
-              href={item.href}
-              className={styles.navLink}
-            >
-              {item.label}
-              <FiArrowUpRight
-                size={20}
-                style={{
-                  marginBottom: "3px",
-                  display: "inline-block",
-                  verticalAlign: "middle",
-                }}
-              />
-            </ExternalLink>
-          ))}
         </nav>
       </div>
 
@@ -369,24 +317,6 @@ export default function Header() {
                   ))}
                 </ul>
               </div>
-              {externalLinks.map((item) => (
-                <ExternalLink
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setMenuOpen(false)}
-                  className={styles.mobileNavLink}
-                >
-                  {item.label}
-                  <FiArrowUpRight
-                    size={30}
-                    style={{
-                      marginBottom: "4px",
-                      display: "inline-block",
-                      verticalAlign: "middle",
-                    }}
-                  />
-                </ExternalLink>
-              ))}
             </nav>
           </motion.div>
         )}
