@@ -18,12 +18,12 @@ const galleryProjects = [
   {
     label: "LMMS Lab Writer",
     href: "https://writer.lmms-lab.com",
-    domain: "writer.lmms-lab.com",
+    description: "AI-native LaTeX editor",
   },
   {
     label: "Engram",
     href: "https://www.engram-encrypt.com/",
-    domain: "www.engram-encrypt.com",
+    description: "Secure-first AI memory layer",
   },
 ];
 
@@ -255,7 +255,7 @@ export default function Header() {
                             {project.label}
                           </span>
                           <span className={styles.dropdownItemMeta}>
-                            {project.domain}
+                            {project.description}
                           </span>
                         </a>
                       </li>
@@ -310,7 +310,7 @@ export default function Header() {
                       >
                         {project.label}
                         <span className={styles.mobileGalleryMeta}>
-                          {project.domain}
+                          {project.description}
                         </span>
                       </a>
                     </li>
