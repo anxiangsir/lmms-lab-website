@@ -70,16 +70,46 @@ export default function Header() {
   const menuRef = useRef<HTMLDivElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const galleryRef = useRef<HTMLDivElement>(null);
+  const galleryCloseTimerRef = useRef<number | null>(null);
+
+  const clearGalleryCloseTimer = useCallback(() => {
+    if (galleryCloseTimerRef.current !== null) {
+      window.clearTimeout(galleryCloseTimerRef.current);
+      galleryCloseTimerRef.current = null;
+    }
+  }, []);
+
+  const openGalleryMenu = useCallback(() => {
+    clearGalleryCloseTimer();
+    setGalleryOpen(true);
+  }, [clearGalleryCloseTimer]);
+
+  const closeGalleryMenu = useCallback(() => {
+    clearGalleryCloseTimer();
+    setGalleryOpen(false);
+  }, [clearGalleryCloseTimer]);
+
+  const scheduleGalleryClose = useCallback(() => {
+    clearGalleryCloseTimer();
+    galleryCloseTimerRef.current = window.setTimeout(() => {
+      setGalleryOpen(false);
+      galleryCloseTimerRef.current = null;
+    }, 180);
+  }, [clearGalleryCloseTimer]);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
+  useEffect(() => {
+    return () => clearGalleryCloseTimer();
+  }, [clearGalleryCloseTimer]);
+
   // Close menu on route change (browser back/forward)
   useEffect(() => {
     setMenuOpen(false);
-    setGalleryOpen(false);
-  }, [pathname]);
+    closeGalleryMenu();
+  }, [pathname, closeGalleryMenu]);
 
   // Lock body scroll when menu is open
   useEffect(() => {
@@ -136,13 +166,13 @@ export default function Header() {
         galleryRef.current &&
         !galleryRef.current.contains(event.target as Node)
       ) {
-        setGalleryOpen(false);
+        closeGalleryMenu();
       }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [galleryOpen]);
+  }, [galleryOpen, closeGalleryMenu]);
 
   // Focus first menu item when opened
   useEffect(() => {
@@ -217,7 +247,8 @@ export default function Header() {
           <div
             ref={galleryRef}
             className={styles.dropdown}
-            onMouseLeave={() => setGalleryOpen(false)}
+            onMouseEnter={openGalleryMenu}
+            onMouseLeave={scheduleGalleryClose}
           >
             <button
               type="button"
@@ -226,9 +257,12 @@ export default function Header() {
               }`}
               aria-haspopup="menu"
               aria-expanded={galleryOpen}
-              onClick={() => setGalleryOpen((prev) => !prev)}
-              onMouseEnter={() => setGalleryOpen(true)}
-              onFocus={() => setGalleryOpen(true)}
+              onClick={() => {
+                clearGalleryCloseTimer();
+                setGalleryOpen((prev) => !prev);
+              }}
+              onMouseEnter={openGalleryMenu}
+              onFocus={openGalleryMenu}
             >
               Gallery
             </button>
@@ -250,7 +284,7 @@ export default function Header() {
                           rel="noopener noreferrer"
                           className={styles.dropdownItem}
                           role="menuitem"
-                          onClick={() => setGalleryOpen(false)}
+                          onClick={closeGalleryMenu}
                         >
                           <span className={styles.dropdownItemLabel}>
                             {project.label}

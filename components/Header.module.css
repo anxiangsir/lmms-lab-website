@@ -120,6 +120,15 @@
 	z-index: 120;
 }
 
+.dropdownPanel::before {
+	content: '';
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: -0.75rem;
+	height: 0.75rem;
+}
+
 .dropdownList {
 	list-style: none;
 	margin: 0;
