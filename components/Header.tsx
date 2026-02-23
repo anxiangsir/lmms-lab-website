@@ -17,6 +17,18 @@ const navItems = [
 ];
 
 const externalLinks = [{ label: "Docs", href: "https://docs.lmms-lab.com" }];
+const galleryProjects = [
+  {
+    label: "LMMS Lab Writer",
+    href: "https://writer.lmms-lab.com",
+    domain: "writer.lmms-lab.com",
+  },
+  {
+    label: "Engram",
+    href: "https://www.engram-encrypt.com/",
+    domain: "www.engram-encrypt.com",
+  },
+];
 
 // External link component that matches TransitionLink structure
 function ExternalLink({
@@ -53,9 +65,11 @@ function ExternalLink({
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [galleryOpen, setGalleryOpen] = useState(false);
   const pathname = usePathname();
   const menuRef = useRef<HTMLDivElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const galleryRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -64,6 +78,7 @@ export default function Header() {
   // Close menu on route change (browser back/forward)
   useEffect(() => {
     setMenuOpen(false);
+    setGalleryOpen(false);
   }, [pathname]);
 
   // Lock body scroll when menu is open
@@ -112,6 +127,22 @@ export default function Header() {
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [handleKeyDown]);
+
+  useEffect(() => {
+    if (!galleryOpen) return;
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        galleryRef.current &&
+        !galleryRef.current.contains(event.target as Node)
+      ) {
+        setGalleryOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [galleryOpen]);
 
   // Focus first menu item when opened
   useEffect(() => {
@@ -183,6 +214,58 @@ export default function Header() {
               {item.label}
             </TransitionLink>
           ))}
+          <div
+            ref={galleryRef}
+            className={styles.dropdown}
+            onMouseLeave={() => setGalleryOpen(false)}
+          >
+            <button
+              type="button"
+              className={`${styles.navLink} ${styles.dropdownTrigger} ${
+                galleryOpen ? styles.active : ""
+              }`}
+              aria-haspopup="menu"
+              aria-expanded={galleryOpen}
+              onClick={() => setGalleryOpen((prev) => !prev)}
+              onMouseEnter={() => setGalleryOpen(true)}
+              onFocus={() => setGalleryOpen(true)}
+            >
+              Gallery
+            </button>
+            <AnimatePresence>
+              {galleryOpen && (
+                <motion.div
+                  className={styles.dropdownPanel}
+                  initial={{ opacity: 0, y: -8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -6 }}
+                  transition={{ duration: 0.18, ease: "easeOut" }}
+                >
+                  <ul className={styles.dropdownList} role="menu">
+                    {galleryProjects.map((project) => (
+                      <li key={project.href} role="none">
+                        <a
+                          href={project.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={styles.dropdownItem}
+                          role="menuitem"
+                          onClick={() => setGalleryOpen(false)}
+                        >
+                          <span className={styles.dropdownItemLabel}>
+                            {project.label}
+                          </span>
+                          <span className={styles.dropdownItemMeta}>
+                            {project.domain}
+                          </span>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
           {externalLinks.map((item) => (
             <ExternalLink
               key={item.href}
@@ -231,6 +314,27 @@ export default function Header() {
                   {item.label}
                 </TransitionLink>
               ))}
+              <div className={styles.mobileGalleryGroup}>
+                <div className={styles.mobileGalleryTitle}>Gallery</div>
+                <ul className={styles.mobileGalleryList}>
+                  {galleryProjects.map((project) => (
+                    <li key={project.href}>
+                      <a
+                        href={project.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={() => setMenuOpen(false)}
+                        className={styles.mobileGalleryLink}
+                      >
+                        {project.label}
+                        <span className={styles.mobileGalleryMeta}>
+                          {project.domain}
+                        </span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
               {externalLinks.map((item) => (
                 <ExternalLink
                   key={item.href}
