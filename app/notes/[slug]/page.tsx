@@ -1,6 +1,7 @@
 import { MDXRemoteWrapper } from "@/components/mdx/MDXRemoteWrapper";
 import { getAllNotes, getNoteBySlug } from "@/lib/posts";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 
 export async function generateStaticParams() {
 	const notes = getAllNotes();
@@ -13,14 +14,24 @@ export async function generateMetadata({
 	params,
 }: {
 	params: Promise<{ slug: string }>;
-}) {
+}): Promise<Metadata> {
 	const { slug } = await params;
 	const note = getNoteBySlug(slug);
-	if (!note) return { title: "Note Not Found" };
+	if (!note) {
+		return {
+			title: "Note Not Found",
+			alternates: {
+				canonical: "/notes/",
+			},
+		};
+	}
 
 	return {
 		title: `${note.title} - LMMs-Lab`,
 		description: note.description,
+		alternates: {
+			canonical: `/notes/${slug}/`,
+		},
 	};
 }
 

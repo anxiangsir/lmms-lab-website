@@ -3,6 +3,7 @@ import { TableOfContents, MobileTableOfContents, ReadingProgress } from "@/compo
 import { extractHeadings } from "@/lib/toc";
 import { getAllPosts, getPostBySlug } from "@/lib/posts";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 
 export async function generateStaticParams() {
 	const posts = getAllPosts();
@@ -15,14 +16,24 @@ export async function generateMetadata({
 	params,
 }: {
 	params: Promise<{ slug: string }>;
-}) {
+}): Promise<Metadata> {
 	const { slug } = await params;
 	const post = getPostBySlug(slug);
-	if (!post) return { title: "Post Not Found" };
+	if (!post) {
+		return {
+			title: "Post Not Found",
+			alternates: {
+				canonical: "/posts/",
+			},
+		};
+	}
 
 	return {
 		title: `${post.title} - LMMs-Lab`,
 		description: post.description,
+		alternates: {
+			canonical: `/posts/${slug}/`,
+		},
 	};
 }
 

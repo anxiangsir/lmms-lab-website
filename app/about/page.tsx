@@ -1,9 +1,13 @@
 import Link from 'next/link';
+import type { Metadata } from 'next';
 import styles from './page.module.css';
 
-export const metadata = {
+export const metadata: Metadata = {
 	title: "About - LMMs-Lab",
 	description: "About LMMs-Lab research team and projects",
+	alternates: {
+		canonical: "/about/",
+	},
 };
 
 interface Project {

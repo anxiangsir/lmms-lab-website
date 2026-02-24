@@ -9,7 +9,7 @@ import {
   useState,
   type ReactNode,
 } from 'react'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import type { TransitionCombo, TransitionContextValue, TransitionPhase, BigTransitionType } from './transitions/transitionTypes'
 import StrobeOverlay from './transitions/StrobeOverlay'
 import HackingOverlay from './transitions/HackingOverlay'
@@ -80,7 +80,6 @@ const IDLE_STATE: ProviderState = {
 export function TransitionProvider({ children }: { children: ReactNode }) {
   const router = useRouter()
   const pathname = usePathname()
-  const searchParams = useSearchParams()
 
   const [state, setState] = useState<ProviderState>(IDLE_STATE)
   const stateRef = useRef(state)
@@ -125,7 +124,8 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
     }
 
     const expectedRouteKey = expectedRouteKeyFromHref(href)
-    const currentRouteKey = routeKeyFromParts(pathname, searchParams.toString())
+    const currentSearch = typeof window !== 'undefined' ? window.location.search.slice(1) : ''
+    const currentRouteKey = routeKeyFromParts(pathname, currentSearch)
 
     // If we're not actually changing route key, don't animate; just navigate.
     if (expectedRouteKey === currentRouteKey) {
@@ -142,7 +142,7 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
       href,
       expectedRouteKey,
     })
-  }, [router, pathname, searchParams])
+  }, [router, pathname])
 
   const startNavigation = useCallback(() => {
     const href = stateRef.current.href
@@ -177,7 +177,8 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
     const expected = state.expectedRouteKey
     if (!expected) return
 
-    const current = routeKeyFromParts(pathname, searchParams.toString())
+    const currentSearch = typeof window !== 'undefined' ? window.location.search.slice(1) : ''
+    const current = routeKeyFromParts(pathname, currentSearch)
     if (current !== expected) return
 
     if (state.phase === 'normal-wait') {
@@ -191,7 +192,7 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
     if (state.phase === 'egg-wait') {
       setState(IDLE_STATE)
     }
-  }, [pathname, searchParams, state.expectedRouteKey, state.phase])
+  }, [pathname, state.expectedRouteKey, state.phase])
 
   return (
     <TransitionCtx.Provider value={{ triggerTransition, phase: state.phase }}>

@@ -1,10 +1,14 @@
+import type { Metadata } from "next";
 import { getAllPosts } from "@/lib/posts";
 import { PostsClient } from "./PostsClient";
 import type { Post } from "@/lib/posts";
 
-export const metadata = {
+export const metadata: Metadata = {
 	title: "Posts - LMMs-Lab",
 	description: "Blog posts from LMMs-Lab research team",
+	alternates: {
+		canonical: "/posts/",
+	},
 };
 
 const ONEVISION_ENCODER_ARCHIVE_ENTRY: Post = {
