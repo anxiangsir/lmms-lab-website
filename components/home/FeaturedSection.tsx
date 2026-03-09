@@ -27,7 +27,7 @@ export function FeaturedSection({ featuredPost }: FeaturedSectionProps) {
 				style={{ width: '100%', display: 'block' }}
 				aria-label={`Read featured article: ${featuredPost.title}`}
 				onMouseEnter={() => {
-					if (href === "/onevision-encoder/index.html") preloadOneVisionEncoder("hot");
+					if (href === "/onevision-encoder/") preloadOneVisionEncoder("hot");
 				}}
 			>
 				<div className="museum-featured-image">

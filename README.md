@@ -56,7 +56,7 @@ mainTags: ["research", "llm"]
 tags: ["research", "llm", "multimodal"]
 authors:
   - name: "Author Name"
-    url: "https://author-website.com"
+    url: "https://www.lmms-lab.com/about/"
     main: true
   - name: "Co-Author Name"
 bibtex: |
@@ -143,8 +143,6 @@ To use a custom image instead of auto-generation:
 ---
 title: "Your Post"
 thumbnail: "/images/custom-thumbnail.jpg"
-# or external URL
-thumbnail: "https://example.com/image.jpg"
 ---
 ```
 

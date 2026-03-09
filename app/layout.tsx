@@ -7,15 +7,23 @@ import Header from "@/components/Header";
 import { MotionProvider } from "@/components/motion/MotionProvider";
 import { TransitionProvider } from "@/components/motion/TransitionSystem";
 import PageTransition from "@/components/motion/PageTransition";
-import { SITE_DESCRIPTION, SITE_URL } from "@/lib/site";
+import { SITE_DESCRIPTION, SITE_KEYWORDS, SITE_NAME, SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
 	metadataBase: new URL(SITE_URL),
-	title: "LMMs-Lab",
+	title: SITE_NAME,
 	description: SITE_DESCRIPTION,
+	keywords: SITE_KEYWORDS,
+	applicationName: SITE_NAME,
+	creator: SITE_NAME,
+	publisher: SITE_NAME,
+	robots: {
+		index: true,
+		follow: true,
+	},
 	icons: {
-		icon: '/icon.png',
-	}
+		icon: "/icon.png",
+	},
 };
 
 export default function RootLayout({

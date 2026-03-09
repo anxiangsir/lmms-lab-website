@@ -6,6 +6,7 @@ dist/
 .next/
 out/
 .cache/
+.worktrees/
 
 # Logs
 *.log

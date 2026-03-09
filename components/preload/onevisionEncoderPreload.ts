@@ -76,7 +76,7 @@ function warm() {
 	if (didWarm) return;
 	didWarm = true;
 
-	// External resources used by `/public/onevision-encoder/index.html`
+	// External resources used by the static `/onevision-encoder/` page.
 	addLink("dns-prefetch", "https://cdn.tailwindcss.com");
 	addLink("preconnect", "https://cdn.tailwindcss.com", { crossorigin: "" });
 
@@ -94,7 +94,7 @@ function warm() {
 
 	// Fetch the HTML during idle so it lands in HTTP cache for the upcoming navigation.
 	idle(() => {
-		fetch("/onevision-encoder/index.html", { method: "GET", credentials: "include" }).catch(() => {});
+		fetch("/onevision-encoder/", { method: "GET", credentials: "include" }).catch(() => {});
 	});
 }
 

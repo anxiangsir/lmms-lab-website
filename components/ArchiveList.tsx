@@ -6,6 +6,7 @@ import styles from "./ArchiveList.module.css";
 
 interface ArchiveEntry {
 	slug: string;
+	href?: string;
 	title: string;
 	description?: string;
 	date: string;
@@ -68,7 +69,7 @@ export default function ArchiveList({
 						return (
 							<TransitionLink
 								key={entry.slug}
-								href={`${basePath}/${entry.slug}`}
+								href={entry.href ?? `${basePath}/${entry.slug}/`}
 								className={styles.entry}
 								aria-label={`Read: ${entry.title}`}
 							>

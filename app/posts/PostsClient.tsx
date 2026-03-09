@@ -1,6 +1,7 @@
 "use client";
 
 import ArchiveList from "@/components/ArchiveList";
+import { getPostHref } from "@/lib/links";
 
 interface Post {
 	slug: string;
@@ -17,7 +18,10 @@ interface PostsClientProps {
 export function PostsClient({ posts }: PostsClientProps) {
 	return (
 		<ArchiveList
-			entries={posts}
+			entries={posts.map((post) => ({
+				...post,
+				href: getPostHref(post.slug),
+			}))}
 			basePath="/posts"
 			label="Archive"
 			sysPath="SYS://research/publications - index"

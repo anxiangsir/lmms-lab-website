@@ -73,12 +73,12 @@ export function HeroSection() {
 									showSubtitle ? '' : 'hidden-sub'
 								}`}
 							>
-								the way to intelligence.
+								the way to multimodal intelligence.
 							</span>
 						</h1>
 						
 						<p className="brutalist-hero-subtitle fade-in-up animate-fill-both stagger-1">
-							Advancing multimodal intelligence through open research. Models, data, and insights - shared as we discover.
+							Open research on multimodal models, evaluation, benchmarks, and lmms-eval tooling - shared as we discover.
 						</p>
 
 						<div className="brutalist-hero-cta fade-in-up animate-fill-both stagger-2">
