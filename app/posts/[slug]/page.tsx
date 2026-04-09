@@ -5,6 +5,7 @@ import { getAllPosts, getPostBySlug } from "@/lib/posts";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import LlavaOV15Page from "./llava-ov-1-5";
+import LongVTPage from "./longvt";
 
 export async function generateStaticParams() {
 	const posts = getAllPosts();
@@ -53,6 +54,11 @@ export default async function PostPage({
 	if (slug === "llava_onevision_1_5") {
 		return <LlavaOV15Page post={post} />;
 	}
+
+	if (slug === "longvt") {
+		return <LongVTPage post={post} />;
+	}
+
 	if (!post) {
 		notFound();
 	}
